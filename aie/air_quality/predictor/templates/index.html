@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IoT Air Quality Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f9;
+            padding: 40px;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .box {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-align: center;
+            color: #27ae60;
+        }
+
+        .field-display {
+            padding: 5px 0;
+            font-size: 1.1em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Left: ThingSpeak data -->
+        <div class="box">
+            <h2>🌐 Real-Time Sensor Values</h2>
+            {% if thingspeak_data.error %}
+                <p style="color:red;">{{ thingspeak_data.error }}</p>
+            {% else %}
+                {% for key, value in thingspeak_data.items %}
+                    <div class="field-display"><strong>{{ key }}:</strong> {{ value }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Right: Prediction form -->
+        <div class="box">
+            <h2>🤖 Air Quality Prediction</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% for label in labels %}
+                    <label>{{ label }}:</label>
+                    <input type="number" step="any" name="{{ label|lower }}" required>
+                {% endfor %}
+                <button type="submit">Predict</button>
+            </form>
+
+            {% if result %}
+                <div class="result">
+                    🧠 Predicted Ventilation Status: {{ result }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
