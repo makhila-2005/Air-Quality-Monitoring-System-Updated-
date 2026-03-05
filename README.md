@@ -15,7 +15,7 @@ This project integrates **Machine Learning with a web application built using Dj
 * Machine Learning model trained with environmental data
 * Real-time prediction based on user input
 * Simple and responsive UI
-* Model accuracy of **above 80%**
+* Model accuracy of **above 89%**
 
 ---
 
